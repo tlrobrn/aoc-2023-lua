@@ -1,60 +1,32 @@
+local FSM = require("src.fsm")
 local M = {}
 
+local function defaultparse(char)
+  return { char, tonumber(char) }
+end
+
+local function process(input, fsm)
+  local sum = 0
+
+  for _, line in ipairs(input) do
+    fsm:reset()
+
+    local digits = fsm:process(line)
+    local n = digits[1] * 10 + digits[#digits]
+
+    sum = sum + n
+  end
+
+  return sum
+end
+
+M.simpleparser = FSM:new({}, defaultparse)
+
 function M.part1(input)
-  local sum = 0
-  for _, line in ipairs(input) do
-    sum = sum + M.parse(line)
-  end
-
-  return sum
+  return process(input, M.simpleparser)
 end
 
-function M.part2(input)
-  local sum = 0
-  for _, line in ipairs(input) do
-    sum = sum + M.advanced_parse(line)
-  end
-
-  return sum
-end
-
-function M.parse(line)
-  local digits = {}
-  for digit in string.gmatch(line, "%d") do
-    table.insert(digits, digit)
-  end
-
-  return digits[1] * 10 + digits[#digits]
-end
-
-local function FSM(t)
-  local a = setmetatable({}, {
-    __index = function()
-      return setmetatable({}, {
-        __index = function(_, e)
-          return { new = e, digit = tonumber(e) }
-        end,
-      })
-    end,
-  })
-
-  for _, v in ipairs(t) do
-    local old, event, new, digit = v[1], v[2], v[3], v[4]
-
-    if not rawget(a, old) then
-      a[old] = setmetatable({}, {
-        __index = function(_, e)
-          return { new = e, digit = tonumber(e) }
-        end,
-      })
-    end
-    a[old][event] = { new = new, digit = digit }
-  end
-
-  return a
-end
-
-local fsm = FSM({
+M.advancedparser = FSM:new({
   { "o", "n", "on" },
   { "on", "e", "e", 1 },
   { "on", "i", "ni" },
@@ -87,19 +59,10 @@ local fsm = FSM({
   { "n", "i", "ni" },
   { "ni", "n", "nin" },
   { "nin", "e", "e", 9 },
-})
+}, defaultparse)
 
-function M.advanced_parse(line)
-  local digits = {}
-  local state = { new = "" }
-  for c in string.gmatch(line, ".") do
-    state = fsm[state.new][c]
-    if state.digit then
-      table.insert(digits, state.digit)
-    end
-  end
-
-  return digits[1] * 10 + digits[#digits]
+function M.part2(input)
+  return process(input, M.advancedparser)
 end
 
 return M

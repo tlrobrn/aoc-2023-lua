@@ -13,15 +13,19 @@ describe("part1", function()
   end)
 end)
 
-describe("parse", function()
-  it("returns the numerical value", function()
-    local result = day1.parse("1abc2")
-    assert.are.equal(12, result)
+describe("simpleparser", function()
+  before_each(function()
+    day1.simpleparser:reset()
+  end)
+
+  it("returns the numerical values", function()
+    local result = day1.simpleparser:process("1abc2")
+    assert.are.same({ 1, 2 }, result)
   end)
 
   it("works with more than two digits", function()
-    local result = day1.parse("elkj1a89g43")
-    assert.are.equal(13, result)
+    local result = day1.simpleparser:process("elkj1a89g43")
+    assert.are.same({ 1, 8, 9, 4, 3 }, result)
   end)
 end)
 
@@ -43,7 +47,7 @@ describe("part2", function()
   end)
 end)
 
-describe("advanced_parse", function()
+describe("advancedparser", function()
   it("works", function()
     local inputs = {
       "two1nine",
@@ -55,18 +59,19 @@ describe("advanced_parse", function()
       "7pqrstsixteen",
     }
     local expecteds = {
-      29,
-      83,
-      13,
-      24,
-      42,
-      14,
-      76,
+      { 2, 1, 9 },
+      { 8, 2, 3 },
+      { 1, 2, 3 },
+      { 2, 1, 3, 4 },
+      { 4, 9, 8, 7, 2 },
+      { 1, 8, 2, 3, 4 },
+      { 7, 6 },
     }
 
     for k, v in ipairs(inputs) do
-      local result = day1.advanced_parse(v)
-      assert.are.equal(expecteds[k], result)
+      day1.advancedparser:reset()
+      local result = day1.advancedparser:process(v)
+      assert.are.same(expecteds[k], result)
     end
   end)
 end)
