@@ -24,3 +24,49 @@ describe("parse", function()
     assert.are.equal(13, result)
   end)
 end)
+
+describe("part2", function()
+  it("works", function()
+    local input = {
+      "two1nine",
+      "eightwothree",
+      "abcone2threexyz",
+      "xtwone3four",
+      "4nineeightseven2",
+      "zoneight234",
+      "7pqrstsixteen",
+    }
+
+    local result = day1.part2(input)
+
+    assert.are.equal(281, result)
+  end)
+end)
+
+describe("advanced_parse", function()
+  it("works", function()
+    local inputs = {
+      "two1nine",
+      "eightwothree",
+      "abcone2threexyz",
+      "xtwone3four",
+      "4nineeightseven2",
+      "zoneight234",
+      "7pqrstsixteen",
+    }
+    local expecteds = {
+      29,
+      83,
+      13,
+      24,
+      42,
+      14,
+      76,
+    }
+
+    for k, v in ipairs(inputs) do
+      local result = day1.advanced_parse(v)
+      assert.are.equal(expecteds[k], result)
+    end
+  end)
+end)

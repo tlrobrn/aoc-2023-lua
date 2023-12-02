@@ -15,3 +15,6 @@ local input = read_input()
 
 local result = day.part1(input)
 print("Part 1: " .. result)
+
+result = day.part2(input)
+print("Part 2: " .. result)
