@@ -51,26 +51,35 @@ local function parse(input)
   })
 end
 
+local function neighbors(partno)
+  local ns = {}
+
+  for _, coord in ipairs(partno) do
+    local x, y = table.unpack(coord)
+
+    table.insert(ns, { x - 1, y - 1 })
+    table.insert(ns, { x - 1, y })
+    table.insert(ns, { x - 1, y + 1 })
+    table.insert(ns, { x, y - 1 })
+    table.insert(ns, { x, y + 1 })
+    table.insert(ns, { x + 1, y - 1 })
+    table.insert(ns, { x + 1, y })
+    table.insert(ns, { x + 1, y + 1 })
+  end
+
+  return ns
+end
+
 function M.part1(input)
   local partnos, symbols = parse(input)
   local sum = 0
 
   for number, appearances in pairs(partnos) do
     for _, coords in ipairs(appearances) do
-      for _, coord in ipairs(coords) do
-        local x, y = table.unpack(coord)
+      for _, neighbor in ipairs(neighbors(coords)) do
+        local x, y = table.unpack(neighbor)
 
-        if symbols[x - 1][y - 1] or symbols[x - 1][y] or symbols[x - 1][y + 1] then
-          sum = sum + number
-          goto continue
-        end
-
-        if symbols[x][y - 1] or symbols[x][y + 1] then
-          sum = sum + number
-          goto continue
-        end
-
-        if symbols[x + 1][y - 1] or symbols[x + 1][y] or symbols[x + 1][y + 1] then
+        if symbols[x][y] then
           sum = sum + number
           goto continue
         end
