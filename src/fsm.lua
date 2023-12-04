@@ -31,10 +31,10 @@ local function define(transisions, default)
 end
 
 function M:new(transitions, default)
-  local o = setmetatable({}, self)
-  o.definition = define(transitions, default)
-  o.state = ""
-  return o
+  return setmetatable({
+    definition = define(transitions, default),
+    state = "",
+  }, self)
 end
 
 function M:event(e)
@@ -46,6 +46,7 @@ end
 
 function M:process(input)
   local results = {}
+
   for char in input:gmatch(".") do
     local result = self:event(char)
     if result then
