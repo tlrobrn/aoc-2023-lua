@@ -2,7 +2,7 @@ local M = {}
 M.__index = M
 
 local function define(transisions, default)
-  default = default or function(_, k)
+  default = default or function(k)
     return { k }
   end
 
