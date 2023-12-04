@@ -1,6 +1,6 @@
 local M = {}
 
-function parse(line)
+local function parse(line)
   local id = tonumber(line:match("%d+"))
   local results = { id = id }
 
