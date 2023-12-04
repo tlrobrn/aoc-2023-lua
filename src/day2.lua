@@ -12,6 +12,8 @@ function parse(line)
     end
   end
 
+  results.power = results.red * results.blue * results.green
+
   return results
 end
 
@@ -40,7 +42,15 @@ function M.part1(input)
 end
 
 function M.part2(input)
-  return ""
+  local sum = 0
+
+  for _, line in ipairs(input) do
+    local result = parse(line)
+
+    sum = sum + result.power
+  end
+
+  return sum
 end
 
 return M
