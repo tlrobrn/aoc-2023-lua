@@ -92,7 +92,41 @@ function M.part1(input)
 end
 
 function M.part2(input)
-  return ""
+  local function hash(coord)
+    local x, y = table.unpack(coord)
+    local l = #input[1]
+
+    return ((y - 1) * l) + (x - 1)
+  end
+
+  local gears = {}
+  local partnos, symbols = parse(input)
+
+  for number, appearances in pairs(partnos) do
+    for _, coords in ipairs(appearances) do
+      for _, neighbor in ipairs(neighbors(coords)) do
+        local x, y = table.unpack(neighbor)
+
+        if symbols[x][y] == "*" then
+          local i = hash({ x, y })
+          gears[i] = gears[i] or {}
+          table.insert(gears[i], number)
+          goto continue
+        end
+      end
+      ::continue::
+    end
+  end
+
+  local sum = 0
+
+  for _, gear in pairs(gears) do
+    if #gear == 2 then
+      sum = sum + (gear[1] * gear[2])
+    end
+  end
+
+  return sum
 end
 
 return M
