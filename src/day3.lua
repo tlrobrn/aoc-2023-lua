@@ -1,4 +1,3 @@
-require("src.pp")
 local M = {}
 
 local function parsenumbers(line, y, t)
