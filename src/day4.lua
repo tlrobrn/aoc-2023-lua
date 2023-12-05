@@ -52,7 +52,26 @@ function M.part1(input)
 end
 
 function M.part2(input)
-  return #input
+  local games = {}
+  for game, line in ipairs(input) do
+    local winners, numbers = parse(line)
+    local matches = count(winners, numbers)
+    games[game] = matches
+  end
+
+  local copies = {}
+  for game, matches in ipairs(games) do
+    for i = game + 1, game + matches do
+      copies[i] = (copies[i] or 0) + (copies[game] or 0) + 1
+    end
+  end
+
+  local total = #input
+  for _, copycount in pairs(copies) do
+    total = total + copycount
+  end
+
+  return total
 end
 
 return M
