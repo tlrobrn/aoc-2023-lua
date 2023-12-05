@@ -1,3 +1,8 @@
+-- make compatible with both lua and luajit
+if not table.unpack then
+  table.unpack = unpack
+end
+
 local function load_day(n)
   return require("src.day" .. n)
 end
